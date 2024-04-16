@@ -2,7 +2,6 @@ package raven.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import raven.main.Section2;
 
 import javax.swing.*;
 import java.awt.*;
