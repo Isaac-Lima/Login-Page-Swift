@@ -1,6 +1,7 @@
 package raven.main;
 import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import raven.login.Login;
 import raven.login.SignUp;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ public class Application extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(1200, 700));
         setLocationRelativeTo(null);
-        setContentPane(new SignUp());
+        setContentPane(new Login());
     }
 
     public static void main(String[] args){
