@@ -2,6 +2,7 @@ package raven.main;
 
 import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import raven.login.SignUp;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,7 @@ public class Application extends JFrame{
         FlatMacDarkLaf.setup(); // Background color
 
         // DON'T DELETE
-        // EventQueue.invokeLater(() -> new Application().setVisible(true));
+//         EventQueue.invokeLater(() -> new Application().setVisible(true));
 
         EventQueue.invokeLater(() -> new Home().setVisible(true));
     }

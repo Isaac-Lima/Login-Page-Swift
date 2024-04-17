@@ -136,6 +136,7 @@ public class SignUp extends JPanel {
 
         // Adding the panel to the SignUp panel
         add(panel);
+
     }
 
     // Method to validate if fields are empty and return which field is empty
