@@ -2,11 +2,13 @@ package raven.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import raven.main.Home;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class Login extends JPanel {
 
@@ -35,6 +37,20 @@ public class Login extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Add the validation using bd
+                String email = txtUsername.getText();
+                String password = new String(txtPassword.getPassword());
+                if (email.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(Login.this, "Por favor, preencha todos os campos.", "Campos Vazios", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    if (verificarLogin(email, password)) {
+                        Home homePage = new Home();
+                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(Login.this);
+                        frame.setContentPane(homePage);
+                        frame.revalidate();
+                    } else {
+                        JOptionPane.showMessageDialog(Login.this, "Email ou senha incorretos. Por favor, tente novamente.", "Erro de Login", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
 
@@ -56,8 +72,12 @@ public class Login extends JPanel {
                 "focusWidth:0;" +
                 "innerFocusWidth:0");
 
+        // Setting properties for password fields to show reveal buttons
+        txtPassword.putClientProperty(FlatClientProperties.STYLE, "" +
+                "showRevealButton:true");
+
         // Setting placeholder text for text fields
-        txtUsername.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Digite seu usuário ou email");
+        txtUsername.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Digite seu email");
         txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Digite sua senha");
 
         // Creating labels for title and description
@@ -72,7 +92,7 @@ public class Login extends JPanel {
         // Adding components to the panel
         panel.add(lbTitle);
         panel.add(description);
-        panel.add(new JLabel("Usuário"), "gapy 8");
+        panel.add(new JLabel("Email"), "gapy 8");
         panel.add(txtUsername);
         panel.add(new JLabel("Senha"), "gapy 8");
         panel.add(txtPassword);
@@ -103,4 +123,26 @@ public class Login extends JPanel {
         panel.add(cmdRegister);
         return panel;
     }
+
+    // Método para verificar o login
+    private boolean verificarLogin(String email, String password) {
+        String url = "jdbc:postgresql://localhost:5434/gestaoDeProdutos";
+        String usuario = "postgres";
+        String senhaBD = "aluno";
+
+        try (Connection conn = DriverManager.getConnection(url, usuario, senhaBD)) {
+            String sql = "SELECT * FROM usuario WHERE email = ? AND password = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, email);
+                stmt.setString(2, password);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next(); // Se encontrar um resultado, o login é válido
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao conectar ao banco de dados.", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    };
 }

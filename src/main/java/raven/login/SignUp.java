@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class SignUp extends JPanel {
 
@@ -68,17 +72,11 @@ public class SignUp extends JPanel {
                             "Senha Curta",
                             JOptionPane.ERROR_MESSAGE);
                 } else {
-                    Login loginPage = new Login();
-                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(SignUp.this);
-                    frame.setContentPane(loginPage);
-                    frame.revalidate();
+                    // Se todos os campos estiverem preenchidos corretamente, então envie os dados para o banco de dados
+                    sendDataToDatabase();
                 }
-                String selectedUserType = (String) userTypeComboBox.getSelectedItem();
-                System.out.println("Tipo de Usuário: " + selectedUserType);
             }
         });
-
-
 
         // Creating a panel with MigLayout for organizing components
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "fill,250:280"));
@@ -136,7 +134,6 @@ public class SignUp extends JPanel {
 
         // Adding the panel to the SignUp panel
         add(panel);
-
     }
 
     // Method to validate if fields are empty and return which field is empty
@@ -164,7 +161,6 @@ public class SignUp extends JPanel {
 
         return emptyField;
     }
-
 
     // Method to validate if the email format is valid
     private boolean validateEmail(String email) {
@@ -240,24 +236,39 @@ public class SignUp extends JPanel {
         return numbers[10] == expectedDigit2;
     }
 
+    // Method to send data to the database
+    private void sendDataToDatabase() {
+        String username = txtUsername.getText();
+        String email = txtEmail.getText();
+        String CPF = txtCPF.getText();
+        String password = String.valueOf(txtPassword.getPassword());
+        String profile = (String) userTypeComboBox.getSelectedItem();
 
-    // Method to create the signup label
-    private Component createSignupLabel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
-        JButton cmdRegister = new JButton("<html><a href=\"#\">Cadastre-se</a></html>");
-        cmdRegister.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:3,3,3,3");
-        cmdRegister.setContentAreaFilled(false);
-        cmdRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5434/gestaoDeProdutos", "postgres", "aluno");
 
-        JLabel label = new JLabel("Não tem uma conta ?");
-        label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "[light]foreground:lighten(@foreground,30%);" +
-                "[dark]foreground:darken(@foreground,30%)");
-        panel.add(label);
-        panel.add(cmdRegister);
-        return panel;
+            String query = "INSERT INTO usuario (username, email, CPF, profile, password) VALUES (?, ? , ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, email);
+            preparedStatement.setString(3, CPF);
+            preparedStatement.setString(4, profile);
+            preparedStatement.setString(5, password);
+            preparedStatement.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Dados enviados com sucesso!");
+            System.out.println("Dados enviados com sucesso!");
+            System.out.println("Volte sempre!");
+
+            preparedStatement.close();
+            connection.close();
+            Login loginPage = new Login();
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(SignUp.this);
+            frame.setContentPane(loginPage);
+            frame.revalidate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao enviar dados para o banco de dados.");
+        }
     }
 }
