@@ -14,6 +14,7 @@ public class Home extends JFrame {
         setTitle("Home");
         setSize(1200, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         // Create a menu bar
         JMenuBar menuBar = new JMenuBar();

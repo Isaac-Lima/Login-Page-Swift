@@ -3,7 +3,7 @@ CREATE TABLE usuario (
     username VARCHAR(45),
     email VARCHAR(45),
     profile VARCHAR(7),
-    cpf VARCHAR(11) UNIQUE,
+    cpf VARCHAR(14) UNIQUE,
     password VARCHAR(20),
     criacao_data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

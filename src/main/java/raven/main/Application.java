@@ -23,7 +23,6 @@ public class Application extends JFrame{
     public static void main(String[] args){
         FlatRobotoMonoFont.install(); // Font Page
         FlatMacDarkLaf.registerCustomDefaultsSource("raven.themes");
-s
         UIManager.put("defaultFont" , new Font(FlatRobotoMonoFont.FAMILY, Font.PLAIN, 13)); // set font, size...
         FlatMacDarkLaf.setup(); // Background color
 

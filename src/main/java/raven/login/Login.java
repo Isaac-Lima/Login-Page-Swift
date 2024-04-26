@@ -126,9 +126,9 @@ public class Login extends JPanel {
 
     // Método para verificar o login
     private boolean verificarLogin(String email, String password) {
-        String url = "jdbc:postgresql://localhost:5434/gestaoDeProdutos";
+        String url = "jdbc:postgresql://localhost:5432/gestaoDeProdutos";
         String usuario = "postgres";
-        String senhaBD = "aluno";
+        String senhaBD = "root";
 
         try (Connection conn = DriverManager.getConnection(url, usuario, senhaBD)) {
             String sql = "SELECT * FROM usuario WHERE email = ? AND password = ?";

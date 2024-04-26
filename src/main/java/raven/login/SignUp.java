@@ -202,10 +202,8 @@ public class SignUp extends JPanel {
         // Removes any non-digit characters from the CPF
         cpf = cpf.replaceAll("[^\\d]", "");
 
-        // Checks if the CPF has 11 digits
-        if (cpf.length() != 11) {
-            return false;
-        }
+        // Set the modified CPF back to the text field
+        txtCPF.setText(cpf);
 
         // Validates the CPF using the algorithm
         int[] numbers = new int[11];
@@ -245,7 +243,7 @@ public class SignUp extends JPanel {
         String profile = (String) userTypeComboBox.getSelectedItem();
 
         try {
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5434/gestaoDeProdutos", "postgres", "aluno");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/gestaoDeProdutos", "postgres", "root");
 
             String query = "INSERT INTO usuario (username, email, CPF, profile, password) VALUES (?, ? , ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
