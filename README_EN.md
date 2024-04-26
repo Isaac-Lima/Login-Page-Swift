@@ -4,6 +4,15 @@
 > This project consists of a system developed as a work for the Software Laboratory school subject of the information technician course. The main objective is to create a platform that allows users to register and login, providing validations similar to reality, always developing an intuitive and easy-to-understand interface.
 <br>
 
+## Documentation
+
+### English
+For English documentation, please see [here](/README_EN.md).
+
+### Português
+Para a documentação em Português, consulte [aqui](README_PT.md).
+
+
 ### Main functions of the project
 
 - [x] Login and registration page
